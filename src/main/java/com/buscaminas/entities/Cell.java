@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cell {
@@ -30,6 +31,13 @@ public class Cell {
     }
 
     public Cell() {
+    }
+
+    public Cell(int x, int y, boolean isMine, boolean visible) {
+        this.x = x;
+        this.y = y;
+        this.isMine = isMine;
+        this.visible = visible;
     }
 
     public Cell(int x, int y, boolean isMine) {
@@ -77,9 +85,9 @@ public class Cell {
         String cssClass = "cell size24";
         if (!this.isVisible()) {
             cssClass += " closed";
-        }else if(this.isMine){
+        } else if (this.isMine) {
             cssClass += " mine";
-        }else{
+        } else {
             cssClass += " type" + this.adjacentMines;
         }
         return cssClass;
@@ -109,12 +117,38 @@ public class Cell {
         isMine = mine;
     }
 
-    public void updateAdjacentMines(List<Cell> board) {
+    public List<Cell> adjacentCells(List<Cell> cells) {
+        return cells.stream()
+                .filter(this::isAdjacent)
+                .collect(Collectors.toList());
+    }
+
+    public void updateAdjacentMinesCount(List<Cell> board) {
         int count = (int) board.stream()
                 .filter(other -> this.isAdjacent(other) && other.isMine())
                 .count();
         this.setAdjacentMines(count);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Cell other = (Cell) obj;
+        return other.getX() == this.getX() && other.getY() == this.getY();
+    }
 
+    private void clickedOnZeroMine(List<Cell> cells) {
+        if(this.isVisible()){
+            return;
+        }
+        this.setVisible(true);
+        this.adjacentCells(cells).stream()
+                .filter(c -> c.getAdjacentMines() == 0)
+                .forEach(c-> c.clickedOnZeroMine(cells));
+    }
+
+    public void updateBoardStatusAfterClick(List<Cell> cells) {
+        if (this.getAdjacentMines() == 0) {
+            clickedOnZeroMine(cells);
+        }
+    }
 }

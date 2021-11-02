@@ -1,12 +1,9 @@
 package com.buscaminas.controllers;
 
-import com.buscaminas.entities.Customer;
 import com.buscaminas.repositories.CellRepository;
-import com.buscaminas.repositories.CustomerRepository;
 import com.buscaminas.entities.Cell;
 import com.buscaminas.models.CellClicked;
 import com.buscaminas.service.Board;
-import com.buscaminas.service.MinesweeperBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +29,17 @@ public class GameController {
         return new RedirectView("/");
     }
 
+    @GetMapping("/test")
+    public String test(Model model) {
+        board.setSeed(0L);
+        List<Cell> cells = board.createCells();
+        cells.get(0).updateBoardStatusAfterClick(cells);
+
+        model.addAttribute("cells", cells);
+        model.addAttribute("cellClicked", new CellClicked());
+        return "game";
+    }
+
     @GetMapping("/")
     public String game(Model model) {
 
@@ -40,7 +48,6 @@ public class GameController {
             cells = board.createCells();
             cells.forEach(c -> cellRepository.save(c));
         }
-
         model.addAttribute("cells", cells);
         model.addAttribute("cellClicked", new CellClicked());
         return "game";

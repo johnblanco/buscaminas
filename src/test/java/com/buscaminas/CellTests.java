@@ -1,13 +1,19 @@
 package com.buscaminas;
 
 import com.buscaminas.entities.Cell;
+import com.buscaminas.service.Board;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CellTests {
+
+    Board board = new Board(0L);
 
     @Test
     public void testCoordinates() {
@@ -42,8 +48,22 @@ public class CellTests {
         List<Cell> board = List.of(c1, c2, c3, c4);
 
         assertEquals(0, c4.getAdjacentMines());
-        c4.updateAdjacentMines(board);
+        c4.updateAdjacentMinesCount(board);
 
         assertEquals(3, c4.getAdjacentMines());
+    }
+
+    @Test
+    public void testClickOnNumberedCell(){
+        Cell c1 = new Cell(0,0, false,false);
+        Cell c2 = new Cell(0,1, false,false);
+        Cell c3 = new Cell(1,0, false,false);
+        Cell c4 = new Cell(1,1, true,false);
+
+        List<Cell> cells = List.of(c1, c2, c3, c4);
+
+        c1.updateBoardStatusAfterClick(cells);
+
+
     }
 }

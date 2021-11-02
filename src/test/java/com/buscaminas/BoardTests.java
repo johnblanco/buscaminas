@@ -3,10 +3,14 @@ package com.buscaminas;
 import com.buscaminas.entities.Cell;
 import com.buscaminas.service.Board;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
 
@@ -27,5 +31,22 @@ public class BoardTests {
 
         assertEquals(10, mines.size());
     }
+
+    @Test
+    public void testClickOnMine(){
+
+    }
+
+    @Test
+    public void testPlaceFlag(){
+
+    }
+
+    @Test
+    public void testClickOnZeroCell(){
+
+    }
+
+
 
 }

@@ -9,12 +9,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 public class Board {
     private Long seed;
-    List<Cell> cells;
 
     public Board() {
     }
@@ -31,17 +29,9 @@ public class Board {
         this.seed = seed;
     }
 
-    public List<Cell> getCells() {
-        return cells;
-    }
-
-    public void setCells(List<Cell> cells) {
-        this.cells = cells;
-    }
-
     public List<Cell> createCells() {
         //creo 81 celdas
-        this.cells = IntStream.range(0, 81)
+        List<Cell> cells = IntStream.range(0, 81)
                 .boxed()
                 .map(Cell::new)
                 .collect(Collectors.toList());
@@ -54,11 +44,9 @@ public class Board {
         }
         selectedMines.forEach(i -> cells.get(i).setMine(true));
 
-        //cells.get(0).setMine(true);//TODO ---- borrar
-        //TODO BUG ---- todo esta quedando con x=0 y=0
-
-        cells.forEach(c -> c.updateAdjacentMines(cells));
+        cells.forEach(c -> c.updateAdjacentMinesCount(cells));
 
         return cells;
     }
+    
 }
